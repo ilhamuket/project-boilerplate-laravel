@@ -27,8 +27,17 @@ Route::middleware('auth')->group(function () {
     })->middleware('permission:budget.view');
 
     Route::get('/export/users', function () {
-    return Excel::download(new UsersExport(), 'users.xlsx');
-});
+        return Excel::download(new UsersExport(), 'users.xlsx');
+    });
+
+    Route::get('/test-activity', function () {
+        activity()
+            ->causedBy(auth()->user()) // kalau belum login, bisa null
+            ->withProperties(['ip' => request()->ip(), 'ua' => request()->userAgent()])
+            ->log('Test activity log works');
+
+        return 'logged';
+    });
 });
 
 require __DIR__.'/auth.php';
