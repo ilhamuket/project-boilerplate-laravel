@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Admin\ActivityLogController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,6 +40,10 @@ Route::middleware('auth')->group(function () {
 
         return 'logged';
     });
+});
+
+Route::middleware(['auth', 'role:super-admin'])->prefix('admin')->group(function () {
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('admin.activity-logs.index');
 });
 
 require __DIR__.'/auth.php';
