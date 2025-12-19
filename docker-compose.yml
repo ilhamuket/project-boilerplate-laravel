@@ -1,0 +1,54 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: app
+    working_dir: /app
+    volumes:
+      - ./src:/app
+      - ./docker/Caddyfile:/etc/frankenphp/Caddyfile
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+      - redis
+
+  node:
+    image: node:20-alpine
+    container_name: node
+    working_dir: /app
+    volumes:
+      - ./src:/app
+    ports:
+      - "5173:5173"
+    command: sh -lc "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - app
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mysql_data:
+  redis_data:
