@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/only-budget-view', function () {
         return 'OK BUDGET VIEW';
     })->middleware('permission:budget.view');
+
+    Route::get('/export/users', function () {
+    return Excel::download(new UsersExport(), 'users.xlsx');
+});
 });
 
 require __DIR__.'/auth.php';
