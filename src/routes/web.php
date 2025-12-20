@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Pdf\SuratController;
+
 
 
 Route::get('/', function () {
@@ -40,6 +42,8 @@ Route::middleware('auth')->group(function () {
 
         return 'logged';
     });
+
+    Route::get('/pdf/surat-keterangan', [SuratController::class, 'suratKeterangan']);
 });
 
 Route::middleware(['auth', 'role:super-admin'])->prefix('admin')->group(function () {
