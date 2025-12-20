@@ -45,3 +45,20 @@ pint:
 
 pint-test:
 	docker compose exec app ./vendor/bin/pint --test
+
+init:
+	cp -n src/.env.example src/.env || true
+	docker compose exec app php artisan key:generate
+	docker compose exec app php artisan migrate
+	docker compose exec app php artisan optimize:clear
+	@echo "✅ Init done. Open http://localhost:8080"
+
+fresh-init:
+	cp -n src/.env.example src/.env || true
+	docker compose exec app php artisan key:generate
+	docker compose exec app php artisan migrate:fresh --seed
+	docker compose exec app php artisan optimize:clear
+	@echo "✅ Fresh init done."
+
+check: pint-test
+	@echo "✅ checks passed"
