@@ -1,13 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Exports\UsersExport;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Pdf\SuratController;
-
-
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-     Route::get('/only-admin', function () {
+    Route::get('/only-admin', function () {
         return 'OK ADMIN';
     })->middleware('role:super-admin');
 
@@ -31,7 +29,7 @@ Route::middleware('auth')->group(function () {
     })->middleware('permission:budget.view');
 
     Route::get('/export/users', function () {
-        return Excel::download(new UsersExport(), 'users.xlsx');
+        return Excel::download(new UsersExport, 'users.xlsx');
     });
 
     Route::get('/test-activity', function () {

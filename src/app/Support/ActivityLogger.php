@@ -35,8 +35,7 @@ class ActivityLogger
     }
 }
 
-
-//example usage:
+// example usage:
 // use App\Support\ActivityLogger;
 
 // ActivityLogger::log(

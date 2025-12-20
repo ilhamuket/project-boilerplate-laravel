@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsSeeder extends Seeder
@@ -35,18 +35,18 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         $superAdmin = Role::firstOrCreate(['name' => 'super-admin']);
-        $hrAdmin    = Role::firstOrCreate(['name' => 'hr-admin']);
-        $finance    = Role::firstOrCreate(['name' => 'finance']);
-        $user       = Role::firstOrCreate(['name' => 'user']);
+        $hrAdmin = Role::firstOrCreate(['name' => 'hr-admin']);
+        $finance = Role::firstOrCreate(['name' => 'finance']);
+        $user = Role::firstOrCreate(['name' => 'user']);
 
         $superAdmin->syncPermissions(Permission::all());
 
         $hrAdmin->syncPermissions([
-            'employee.view','employee.create','employee.update','employee.delete',
+            'employee.view', 'employee.create', 'employee.update', 'employee.delete',
         ]);
 
         $finance->syncPermissions([
-            'budget.view','budget.create','budget.update','budget.delete',
+            'budget.view', 'budget.create', 'budget.update', 'budget.delete',
         ]);
 
         $user->syncPermissions([
