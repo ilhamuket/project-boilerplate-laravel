@@ -39,3 +39,9 @@ composer:
 
 npm:
 	docker compose exec $(NODE) sh -lc "npm $(cmd)"
+
+pint:
+	docker compose exec app ./vendor/bin/pint
+
+pint-test:
+	docker compose exec app ./vendor/bin/pint --test
