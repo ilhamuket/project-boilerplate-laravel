@@ -50,4 +50,12 @@ Route::middleware(['auth', 'role:super-admin'])->prefix('admin')->group(function
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('admin.activity-logs.index');
 });
 
+Route::get('/health', function () {
+    return response()->json([
+        'ok' => true,
+        'app' => config('app.name'),
+        'time' => now()->toISOString(),
+    ]);
+});
+
 require __DIR__.'/auth.php';
