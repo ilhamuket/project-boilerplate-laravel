@@ -41,24 +41,30 @@ npm:
 	docker compose exec $(NODE) sh -lc "npm $(cmd)"
 
 pint:
-	docker compose exec app ./vendor/bin/pint
+	docker compose exec $(APP) ./vendor/bin/pint
 
 pint-test:
-	docker compose exec app ./vendor/bin/pint --test
+	docker compose exec $(APP) ./vendor/bin/pint --test
 
-init:
+env:
 	cp -n src/.env.example src/.env || true
-	docker compose exec app php artisan key:generate
-	docker compose exec app php artisan migrate
-	docker compose exec app php artisan optimize:clear
-	@echo "✅ Init done. Open http://localhost:8080"
 
-fresh-init:
-	cp -n src/.env.example src/.env || true
-	docker compose exec app php artisan key:generate
-	docker compose exec app php artisan migrate:fresh --seed
-	docker compose exec app php artisan optimize:clear
-	@echo "✅ Fresh init done."
+deps:
+	docker compose exec $(APP) composer install
+
+node-deps:
+	docker compose exec $(NODE) sh -lc "npm install"
+
+key:
+	docker compose exec $(APP) php artisan key:generate --force
+
+# ✅ ini untuk orang baru setelah clone
+setup: up env deps key migrate cache-clear
+	@echo "✅ Setup done. Open http://localhost:8080"
+
+# ✅ reset DB
+fresh-setup: up env deps key fresh cache-clear
+	@echo "✅ Fresh setup done."
 
 check: pint-test
 	@echo "✅ checks passed"
