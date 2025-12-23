@@ -1,0 +1,3 @@
+
+# prevent weird generated files
+IlluminateFoundationComposerScripts::postAutoloadDump
